@@ -38,6 +38,10 @@ def write_messages_to_files(chat_data):
     
     # Iterate over each unique user name
     for user_name in unique_user_names:
+        # Skip the username "nightbot"
+        if user_name.lower() == "nightbot":
+            continue
+        
         # Collect all messages for the current user
         messages = [chat_data['message'][i] for i in range(len(chat_data['user_name'])) if chat_data['user_name'][i] == user_name]
         
