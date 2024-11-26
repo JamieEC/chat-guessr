@@ -121,22 +121,6 @@
         .info-icon:hover {
             background-color: #0056b3;
         }
-        .tooltip {
-            visibility: hidden;
-            width: 300px;
-            background-color: #333;
-            color: #fff;
-            font-size: 0.7em;
-            text-align: center;
-            border-radius: 5px;
-            padding: 5px;
-            position: absolute;
-            z-index: 1;
-            bottom: 50px;
-            right: 10px;
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
         .info-icon:hover .tooltip {
             visibility: visible;
             opacity: 1;
@@ -186,6 +170,8 @@
         .lifeline-button:hover .tooltip {
             visibility: visible;
             opacity: 1;
+            transform: translateX(-50%);
+
         }
         .disabled {
             background-color: #dc3545;
