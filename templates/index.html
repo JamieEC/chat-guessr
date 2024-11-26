@@ -140,33 +140,6 @@
             visibility: visible;
             opacity: 1;
         }
-        .lifeline-container {
-            position: fixed;
-            left: 10px;
-            top: 50%;
-            transform: translateY(-50%);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        .lifeline-button {
-            margin: 10px;
-            padding: 10px 20px;
-            font-size: 1em;
-            border: none;
-            border-radius: 5px;
-            background-color: #28a745;
-            color: white;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-        .lifeline-button:hover {
-            background-color: #218838;
-        }
-        .disabled {
-            background-color: #dc3545;
-            cursor: not-allowed;
-        }
     </style>
 </head>
 <body>
@@ -191,10 +164,6 @@
             Get it right on your first try: 100 points<br>
             Get it right on your second try: 50 points
         </div>
-    </div>
-
-    <div class="lifeline-container">
-        <button class="lifeline-button" onclick="useFiftyFifty()">50/50</button>
     </div>
 
     
@@ -271,20 +240,6 @@
             updateScore();
             document.getElementById('gameOverPopup').style.display = 'none';
             fetchMessage();
-        }
-
-        function useFiftyFifty() {
-            const guessesDiv = document.getElementById('guesses');
-            const buttons = Array.from(guessesDiv.getElementsByClassName('guess-button'));
-            const incorrectButtons = buttons.filter(button => button.innerText !== correctAnswer);
-            
-            if (incorrectButtons.length > 2) {
-                const toDisable = incorrectButtons.slice(0, 2);
-                toDisable.forEach(button => {
-                    button.classList.add('disabled');
-                    button.onclick = null;
-                });
-            }
         }
 
         fetchMessage();
