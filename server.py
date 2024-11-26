@@ -27,7 +27,7 @@ def get_message_and_guesses():
 
     # Pick 4 random usernames for guesses (excluding the chosen username)
     remaining_users = [u for u in user_subset.keys() if u != username]
-    guesses = random.sample(remaining_users, 4)
+    guesses = random.sample(remaining_users, 3)
     # Insert the correct username at a random position
     guesses.insert(random.randint(0, len(guesses)), username)
 
