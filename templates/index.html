@@ -101,6 +101,44 @@
         .popup button:hover {
             background-color: #0056b3;
         }
+        .info-icon {
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+            width: 40px;
+            height: 40px;
+            background-color: #007bff;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5em;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .info-icon:hover {
+            background-color: #0056b3;
+        }
+        .tooltip {
+            visibility: hidden;
+            width: 200px;
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            border-radius: 5px;
+            padding: 5px;
+            position: absolute;
+            z-index: 1;
+            bottom: 50px;
+            right: 10px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .info-icon:hover .tooltip {
+            visibility: visible;
+            opacity: 1;
+        }
     </style>
 </head>
 <body>
@@ -114,6 +152,17 @@
     <div class="popup" id="gameOverPopup" style="display: none;">
         <p>You're out of lives! Would you like to try again?</p>
         <button onclick="restartGame()">Try Again</button>
+    </div>
+
+    <div class="info-icon">
+        ?
+        <div class="tooltip">
+            Guess who said the chat message.<br>
+            2 guesses per round.<br>
+            Exceed this, you lose a life.<br>
+            100 points for correct on 1st try.<br>
+            50 points for correct on 2nd.
+        </div>
     </div>
 
     <script>
