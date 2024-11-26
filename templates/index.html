@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nevo1st - Who made the comment?</title>
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            background-color: #f4f4f9; 
+            color: #333; 
+            margin: 0; 
+            padding: 0; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            justify-content: center; 
+            height: 100vh; 
+        }
+        .title {
+            position: absolute;
+            top: 0;
+            width: 100%;
+            text-align: center;
+            font-size: 2em;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+        .message { 
+            margin: 20px; 
+            font-size: 1.5em; 
+            font-weight: bold; 
+            text-align: center; 
+        }
+        .guesses { 
+            margin: 20px; 
+            display: flex; 
+            flex-wrap: wrap; 
+            justify-content: center; 
+        }
+        .guess-button { 
+            margin: 5px; 
+            padding: 10px 20px; 
+            font-size: 1em; 
+            border: none; 
+            border-radius: 5px; 
+            background-color: #007bff; 
+            color: white; 
+            cursor: pointer; 
+            transition: background-color 0.3s; 
+        }
+        .guess-button:hover { 
+            background-color: #0056b3; 
+        }
+        #result { 
+            margin-top: 20px; 
+            font-size: 1.5em; 
+        }
+        .correct { 
+            color: green; 
+        }
+        .incorrect { 
+            color: red; 
+        }
+        #score { 
+            margin-top: 20px; 
+            font-size: 1.2em; 
+            font-weight: bold; 
+        }
+        #lives { 
+            position: absolute; 
+            top: 10px; 
+            right: 10px; 
+            font-size: 1.5em; 
+            font-weight: bold; 
+        }
+        .popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #f4f4f9;
+            padding: 20px;
+            border: 2px solid #333;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            text-align: center;
+            z-index: 1000;
+        }
+        .popup button {
+            margin-top: 10px;
+            padding: 10px 20px;
+            font-size: 1em;
+            border: none;
+            border-radius: 5px;
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .popup button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="title">Nevoguessr - Guess who said this degenerate comment</div>
+    <div class="message" id="message"></div>
+    <div class="guesses" id="guesses"></div>
+    <div id="result"></div>
+    <div id="score">Score: 0</div>
+    <div id="lives">Lives: 5</div>
+
+    <div class="popup" id="gameOverPopup" style="display: none;">
+        <p>You're out of lives! Would you like to try again?</p>
+        <button onclick="restartGame()">Try Again</button>
+    </div>
+
+    <script>
+        let score = 0;
+        let attempts = 0;
+        let isAnswered = false;
+        let lives = 5;
+
+        async function fetchMessage() {
+            const response = await fetch('/get_message');
+            const data = await response.json();
+            document.getElementById('message').innerText = data.message;
+            const guessesDiv = document.getElementById('guesses');
+            guessesDiv.innerHTML = '';
+            data.guesses.forEach(guess => {
+                const button = document.createElement('button');
+                button.innerText = guess;
+                button.className = 'guess-button';
+                button.onclick = () => checkGuess(guess, data.username);
+                guessesDiv.appendChild(button);
+            });
+            document.getElementById('result').innerText = '';
+            attempts = 0;
+            isAnswered = false;
+        }
+
+        function checkGuess(selected, correct) {
+            if (isAnswered) return;
+
+            const resultDiv = document.getElementById('result');
+            attempts++;
+            if (selected === correct) {
+                if (attempts === 1) {
+                    score += 100;
+                } else if (attempts === 2) {
+                    score += 50;
+                }
+                resultDiv.innerText = 'Correct!';
+                resultDiv.className = 'correct';
+                updateScore();
+                isAnswered = true;
+                setTimeout(fetchMessage, 1000);
+            } else {
+                if (attempts > 2) {
+                    lives--;
+                    updateLives();
+                    if (lives <= 0) {
+                        showGameOverPopup();
+                        return;
+                    }
+                }
+                resultDiv.innerText = 'Wrong! Try again.';
+                resultDiv.className = 'incorrect';
+            }
+        }
+
+        function updateScore() {
+            document.getElementById('score').innerText = `Score: ${score}`;
+        }
+
+        function updateLives() {
+            document.getElementById('lives').innerText = `Lives: ${lives}`;
+        }
+
+        function showGameOverPopup() {
+            document.getElementById('gameOverPopup').style.display = 'block';
+        }
+
+        function restartGame() {
+            lives = 5;
+            score = 0;
+            updateLives();
+            updateScore();
+            document.getElementById('gameOverPopup').style.display = 'none';
+            fetchMessage();
+        }
+
+        fetchMessage();
+    </script>
+</body>
+</html>
