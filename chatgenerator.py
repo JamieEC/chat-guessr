@@ -30,6 +30,7 @@ def get_unique_user_names(chat_data):
     return unique_user_names
 
 def write_messages_to_files(chat_data):
+    total_message_count = 0
     # Get unique user names
     unique_user_names = get_unique_user_names(chat_data)
     
@@ -42,16 +43,25 @@ def write_messages_to_files(chat_data):
         if user_name.lower() == "nightbot":
             continue
         
+        print("Writing messages for user:", user_name)
+
         # Collect all messages for the current user
         messages = [chat_data['message'][i] for i in range(len(chat_data['user_name'])) if chat_data['user_name'][i] == user_name]
         
         # Define the file path
         file_path = os.path.join('user_messages', f"{user_name}_messages.txt")
         
+        total_message_count += len(messages)
+
+        message_count = len(messages)
+        print("Message count for user", user_name, ":", message_count)
+
         # Write messages to the file
         with open(file_path, 'w', encoding='utf-8') as file:
             for message in messages:
                 file.write(message + '\n')
+        
+    print("Total message count:", total_message_count)
 
 # Example usage
 all_chat_data = read_twitch_chat_files()
