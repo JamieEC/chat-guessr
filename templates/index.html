@@ -281,6 +281,16 @@
             document.getElementById('result').innerText = '';
             attempts = 0;
             isAnswered = false;
+
+            // Check if a blurb is available and enable/disable the button
+            const blurbButton = document.getElementById('blurbButton');
+            if (data.blurb) {
+                blurbButton.disabled = false;
+                blurbButton.style.backgroundColor = '#28a745'; // Green
+            } else {
+                blurbButton.disabled = true;
+                blurbButton.style.backgroundColor = '#dc3545'; // Grey
+            }
         }
 
         function useFiftyFifty() {
@@ -411,6 +421,11 @@
         function closeViewerClipPopup() {
             document.getElementById('viewerClipPopup').style.display = 'none';
             document.getElementById('viewerClipIframe').src = ""; // Reset the iframe source
+        }
+
+        function showBlurb() {
+            // Display the blurb in a popup or alert
+            alert(`Blurb for ${correctUsername}: ${data.blurb}`);
         }
 
         fetchMessage();
