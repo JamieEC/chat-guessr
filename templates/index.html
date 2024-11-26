@@ -216,6 +216,10 @@
         <button onclick="closeViewerClipPopup()">Close</button>
     </div>
 
+    <div id="copyFeedback" style="display: none; position: fixed; top: 20px; right: 20px; background-color: #28a745; color: white; padding: 10px; border-radius: 5px; z-index: 1000;">
+        Copied to clipboard!
+    </div>
+
     <div class="info-icon">
         ?
         <div class="tooltip">
@@ -238,7 +242,7 @@
         </button>
         <button class="lifeline-button" id="askTheAudience" onclick="useAskTheAudience()">
             Ask the Audience
-            <div class="tooltip">Start a Twitch poll and click this button (no cheating!)</div>
+            <div class="tooltip">Start a Twitch poll and click this button to copy the message to your clipboard (no cheating!)</div>
         </button>
         <button class="lifeline-button" id="askAViewer" onclick="useAskAViewer()">
             Ask a Viewer
@@ -314,7 +318,17 @@
         }
 
         function useAskTheAudience() {
-            //window.open('https://discord.gg/aUSKbeJPXp', '_blank');
+            const message = document.getElementById('message').innerText; // Get the current message
+            navigator.clipboard.writeText(message).then(() => {
+                // Show feedback message
+                const feedback = document.getElementById('copyFeedback');
+                feedback.style.display = 'block';
+                setTimeout(() => {
+                    feedback.style.display = 'none';
+                }, 2000); // Hide after 2 seconds
+            }).catch(err => {
+                console.error('Could not copy text: ', err);
+            });
             disableButton('askTheAudience');
         }
 
