@@ -211,6 +211,11 @@
         <button onclick="closeClipPopup()">Close</button>
     </div>
 
+    <div class="popup" id="viewerClipPopup" style="display: none;">
+        <iframe id="viewerClipIframe" src="" frameborder="0" allowfullscreen="true" scrolling="no" height="378" width="620"></iframe>
+        <button onclick="closeViewerClipPopup()">Close</button>
+    </div>
+
     <div class="info-icon">
         ?
         <div class="tooltip">
@@ -229,7 +234,7 @@
         </button>
         <button class="lifeline-button" id="helpfulClip" onclick="showHelpfulClip()">
             Helpful Clip
-            <div class="tooltip">Watch a helpful and relevant Twitch clip.</div>
+            <div class="tooltip">Watch a helpful and relevant Twitch clip to give some context.</div>
         </button>
         <button class="lifeline-button" id="askTheAudience" onclick="useAskTheAudience()">
             Ask the Audience
@@ -237,7 +242,7 @@
         </button>
         <button class="lifeline-button" id="askAViewer" onclick="useAskAViewer()">
             Ask a Viewer
-            <div class="tooltip">Video of a viewer who may help you.</div>
+            <div class="tooltip">Video of a fan which may help you.</div>
         </button>
     </div>
 
@@ -249,6 +254,14 @@
         let lives = 5;
         let correctUsername = '';
         let guesses = [];
+
+        // Array of clips hosted on the server
+        const viewerClips = [
+            "https://yourserver.com/clips/clip1.mp4",
+            "https://yourserver.com/clips/clip2.mp4",
+            "https://yourserver.com/clips/clip3.mp4",
+            // Add more clip URLs as needed
+        ];
 
         async function fetchMessage() {
             const response = await fetch('/get_message');
@@ -284,7 +297,13 @@
         }
 
         function useAskAViewer() {
-            window.open('https://discord.gg/aUSKbeJPXp', '_blank');
+            // Select a random clip from the array
+            let randomIndex = Math.floor(Math.random() * viewerClips.length);
+            let selectedClipUrl = viewerClips[randomIndex];
+
+            // Show the clip in the popup
+            document.getElementById('viewerClipIframe').src = selectedClipUrl;
+            document.getElementById('viewerClipPopup').style.display = 'block';
             disableButton('askAViewer');
         }
 
@@ -378,6 +397,11 @@
 
         function closeClipPopup() {
             document.getElementById('clipPopup').style.display = 'none';
+        }
+
+        function closeViewerClipPopup() {
+            document.getElementById('viewerClipPopup').style.display = 'none';
+            document.getElementById('viewerClipIframe').src = ""; // Reset the iframe source
         }
 
         fetchMessage();
