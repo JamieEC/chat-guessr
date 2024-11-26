@@ -184,6 +184,11 @@
         <button onclick="restartGame()">Try Again</button>
     </div>
 
+    <div class="popup" id="clipPopup" style="display: none;">
+        <iframe src="https://clips.twitch.tv/embed?clip=AlluringWrongPepperoniChefFrank-CsmAEDeI58rKy9ga&parent=www.example.com" frameborder="0" allowfullscreen="true" scrolling="no" height="378" width="620"></iframe>
+        <button onclick="closeClipPopup()">Close</button>
+    </div>
+
     <div class="info-icon">
         ?
         <div class="tooltip">
@@ -197,7 +202,7 @@
 
     <div class="lifeline">
         <button class="lifeline-button" id="fiftyFifty" onclick="useFiftyFifty()">50/50</button>
-        <button class="lifeline-button" id="phoneAFriend" onclick="usePhoneAFriend()">Phone a Friend</button>
+        <button class="lifeline-button" id="helpfulClip" onclick="showHelpfulClip()">Helpful Clip</button>
         <button class="lifeline-button" id="askTheAudience" onclick="useAskTheAudience()">Ask the Audience</button>
     </div>
 
@@ -241,10 +246,6 @@
                 }
             });
             disableButton('fiftyFifty');
-        }
-
-        function usePhoneAFriend() {
-            disableButton('phoneAFriend');
         }
 
         function useAskTheAudience() {
@@ -307,6 +308,15 @@
             updateScore();
             document.getElementById('gameOverPopup').style.display = 'none';
             fetchMessage();
+        }
+
+        function showHelpfulClip() {
+            document.getElementById('clipPopup').style.display = 'block';
+            disableButton('helpfulClip');
+        }
+
+        function closeClipPopup() {
+            document.getElementById('clipPopup').style.display = 'none';
         }
 
         fetchMessage();
