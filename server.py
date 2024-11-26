@@ -33,6 +33,13 @@ def get_message_and_guesses():
 
     return message, username, guesses
 
+def get_user_blurb(username):
+    blurb_file_path = f'user_blurbs/{username}_blurb.txt'
+    if os.path.exists(blurb_file_path):
+        with open(blurb_file_path, 'r', encoding='utf-8') as f:
+            return f.read().strip()
+    return None
+
 @app.route('/')
 def index():
     return render_template('index.html')
@@ -40,10 +47,11 @@ def index():
 @app.route('/get_message')
 def get_message():
     message, username, guesses = get_message_and_guesses()
+    blurb = get_user_blurb(username)  # Get the blurb for the correct username
     print(message)
     print(username)
     print(guesses)
-    return jsonify({'message': message, 'guesses': guesses, 'username': username})
+    return jsonify({'message': message, 'guesses': guesses, 'username': username, 'blurb': blurb})
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0')
