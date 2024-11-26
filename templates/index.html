@@ -140,6 +140,33 @@
             visibility: visible;
             opacity: 1;
         }
+        .lifeline {
+            position: fixed;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .lifeline-button {
+            margin: 10px;
+            padding: 10px 20px;
+            font-size: 1em;
+            border: none;
+            border-radius: 5px;
+            background-color: #28a745;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .lifeline-button:hover {
+            background-color: #218838;
+        }
+        .disabled {
+            background-color: #dc3545;
+            cursor: not-allowed;
+        }
     </style>
 </head>
 <body>
@@ -166,12 +193,18 @@
         </div>
     </div>
 
+    <div class="lifeline">
+        <button class="lifeline-button" id="fiftyFifty" onclick="useFiftyFifty()">50/50</button>
+    </div>
+
     
     <script>
         let score = 0;
         let attempts = 0;
         let isAnswered = false;
         let lives = 5;
+        let correctUsername = '';
+        let guesses = [];
 
         async function fetchMessage() {
             const response = await fetch('/get_message');
@@ -179,16 +212,31 @@
             document.getElementById('message').innerText = data.message;
             const guessesDiv = document.getElementById('guesses');
             guessesDiv.innerHTML = '';
-            data.guesses.forEach(guess => {
+            correctUsername = data.username;
+            guesses = data.guesses;
+            guesses.forEach(guess => {
                 const button = document.createElement('button');
                 button.innerText = guess;
                 button.className = 'guess-button';
-                button.onclick = () => checkGuess(guess, data.username);
+                button.onclick = () => checkGuess(guess, correctUsername);
                 guessesDiv.appendChild(button);
             });
             document.getElementById('result').innerText = '';
             attempts = 0;
             isAnswered = false;
+        }
+
+        function useFiftyFifty() {
+            const incorrectGuesses = guesses.filter(guess => guess !== correctUsername);
+            const toDisable = incorrectGuesses.sort(() => 0.5 - Math.random()).slice(0, 2);
+            toDisable.forEach(guess => {
+                const button = Array.from(document.getElementsByClassName('guess-button')).find(btn => btn.innerText === guess);
+                if (button) {
+                    button.classList.add('disabled');
+                    button.onclick = null;
+                }
+            });
+            document.getElementById('fiftyFifty').disabled = true;
         }
 
         function checkGuess(selected, correct) {
