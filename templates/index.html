@@ -248,6 +248,7 @@
         let lives = 5;
         let correctUsername = '';
         let guesses = [];
+        let fetchedData = {}; // Global variable to store fetched data
 
         // Array of clips hosted on the server
         const viewerClips = [
@@ -265,12 +266,12 @@
 
         async function fetchMessage() {
             const response = await fetch('/get_message');
-            const data = await response.json();
-            document.getElementById('message').innerText = data.message;
+            fetchedData = await response.json(); // Store the fetched data in the global variable
+            document.getElementById('message').innerText = fetchedData.message;
             const guessesDiv = document.getElementById('guesses');
             guessesDiv.innerHTML = '';
-            correctUsername = data.username;
-            guesses = data.guesses;
+            correctUsername = fetchedData.username;
+            guesses = fetchedData.guesses;
             guesses.forEach(guess => {
                 const button = document.createElement('button');
                 button.innerText = guess;
@@ -284,12 +285,12 @@
 
             // Check if a blurb is available and enable/disable the button
             const blurbButton = document.getElementById('blurbButton');
-            if (data.blurb) {
+            if (fetchedData.blurb) {
                 blurbButton.disabled = false;
                 blurbButton.style.backgroundColor = '#28a745'; // Green
             } else {
                 blurbButton.disabled = true;
-                blurbButton.style.backgroundColor = '#dc3545'; // Grey
+                blurbButton.style.backgroundColor = '#757575'; // Grey
             }
         }
 
@@ -425,7 +426,7 @@
 
         function showBlurb() {
             // Display the blurb in a popup or alert
-            alert(`Blurb for ${correctUsername}: ${data.blurb}`);
+            alert(`Blurb for ${correctUsername}: ${fetchedData.blurb}`);
         }
 
         fetchMessage();
