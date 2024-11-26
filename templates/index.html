@@ -316,9 +316,18 @@
             fetchMessage();
         }
 
+        let clips = [
+        "https://clips.twitch.tv/embed?clip=AlluringWrongPepperoniChefFrank-CsmAEDeI58rKy9ga&parent=nevoguessr.sytes.net",
+        // Add more clip URLs here
+        ];
+        
         function showHelpfulClip() {
-            document.getElementById('clipPopup').style.display = 'block';
-            disableButton('helpfulClip');
+        let randomIndex = Math.floor(Math.random() * clips.length);
+        let selectedClipUrl = clips[randomIndex];
+        
+        document.getElementById('clipPopup').style.display = 'block';
+        document.querySelector('#clipPopup iframe').src = selectedClipUrl;
+        disableButton('helpfulClip');
         }
 
         function closeClipPopup() {
