@@ -63,6 +63,31 @@ def write_messages_to_files(chat_data):
         
     print("Total message count:", total_message_count)
 
+def compile_all_messages_to_csv(output_file='all_messages.csv'):
+    # Initialize a list to store all messages
+    all_messages = []
+
+    # Iterate through each user message file
+    for filename in os.listdir('user_messages'):
+        if filename.endswith('_messages.txt'):
+            user_name = filename.replace('_messages.txt', '')
+            with open(os.path.join('user_messages', filename), 'r', encoding='utf-8') as f:
+                messages = f.readlines()
+                for message in messages:
+                    all_messages.append({'user_name': user_name, 'message': message.strip()})
+
+    # Write all messages to a single CSV file
+    with open(output_file, mode='w', newline='', encoding='utf-8') as csv_file:
+        fieldnames = ['user_name', 'message']
+        writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
+
+        writer.writeheader()  # Write the header
+        writer.writerows(all_messages)  # Write all messages
+
+    print(f"All messages have been compiled into {output_file}.")
+
 # Example usage
-all_chat_data = read_twitch_chat_files()
-write_messages_to_files(all_chat_data)
+if __name__ == '__main__':
+    all_chat_data = read_twitch_chat_files()
+    write_messages_to_files(all_chat_data)
+    compile_all_messages_to_csv()  # Call the function to compile messages

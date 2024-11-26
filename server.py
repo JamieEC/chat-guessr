@@ -1,37 +1,54 @@
+import csv
 from flask import Flask, jsonify, render_template
 import os
 import random
 
 app = Flask(__name__)
 
+def load_all_messages(file_path='all_messages.csv'):
+    messages = []
+    user_message_count = {}
+
+    with open(file_path, mode='r', encoding='utf-8') as csv_file:
+        reader = csv.DictReader(csv_file)
+        for row in reader:
+            user_name = row['user_name']
+            message = row['message']
+            messages.append((user_name, message))
+
+            # Count messages for each user
+            if user_name in user_message_count:
+                user_message_count[user_name] += 1
+            else:
+                user_message_count[user_name] = 1
+
+    return messages, user_message_count
+
 def get_message_and_guesses():
-    user_stats = {}
-    for filename in os.listdir('user_messages'):
-        if filename.endswith('_messages.txt'):
-            username = filename.replace('_messages.txt', '')
-            with open(os.path.join('user_messages', filename), 'r', encoding='utf-8') as f:
-                line_count = sum(1 for line in f)
-            user_stats[username] = line_count
+    messages, user_message_count = load_all_messages()  # Load messages and user counts
 
-    # Get subset of 8 users
-    user_stats = {k: v for k, v in user_stats.items() if v >= 9}
-    user_stats = dict(sorted(user_stats.items(), key=lambda x: x[1], reverse=True))
-    user_subset = dict(random.sample(list(user_stats.items()), min(8, len(user_stats))))
+    # Filter users with more than 9 messages
+    valid_users = {user: count for user, count in user_message_count.items() if count > 9}
 
-    # Pick random username from subset
-    username = random.choice(list(user_subset.keys()))
-    with open(f'user_messages/{username}_messages.txt', 'r', encoding='utf-8') as f:
-        lines = f.readlines()
-        valid_lines = [line.strip() for line in lines if len(line.strip()) > 5]
-        message = random.choice(valid_lines)
+    if not valid_users:
+        return None, None, []  # No valid users
+
+    # Randomly select a user from valid users
+    selected_user = random.choice(list(valid_users.keys()))
+
+    # Filter messages for the selected user
+    user_messages = [msg for user, msg in messages if user == selected_user]
+
+    # Randomly select a message from the user's messages
+    selected_message = random.choice(user_messages)
 
     # Pick 4 random usernames for guesses (excluding the chosen username)
-    remaining_users = [u for u in user_subset.keys() if u != username]
+    remaining_users = [u for u in valid_users.keys() if u != selected_user]
     guesses = random.sample(remaining_users, 3)
     # Insert the correct username at a random position
-    guesses.insert(random.randint(0, len(guesses)), username)
+    guesses.insert(random.randint(0, len(guesses)), selected_user)
 
-    return message, username, guesses
+    return selected_message, selected_user, guesses
 
 def get_user_blurb(username):
     blurb_file_path = f'user_blurbs/{username}_blurb.txt'
