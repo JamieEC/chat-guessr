@@ -196,6 +196,8 @@
 
     <div class="lifeline">
         <button class="lifeline-button" id="fiftyFifty" onclick="useFiftyFifty()">50/50</button>
+        <button class="lifeline-button" id="phoneAFriend" onclick="usePhoneAFriend()">Phone a Friend</button>
+        <button class="lifeline-button" id="askTheAudience" onclick="useAskTheAudience()">Ask the Audience</button>
     </div>
 
     
@@ -237,9 +239,21 @@
                     button.onclick = null;
                 }
             });
-            const fiftyFiftyButton = document.getElementById('fiftyFifty');
-            fiftyFiftyButton.classList.add('disabled');
-            fiftyFiftyButton.onclick = null;
+            disableButton('fiftyFifty');
+        }
+
+        function usePhoneAFriend() {
+            disableButton('phoneAFriend');
+        }
+
+        function useAskTheAudience() {
+            disableButton('askTheAudience');
+        }
+
+        function disableButton(buttonId) {
+            const button = document.getElementById(buttonId);
+            button.classList.add('disabled');
+            button.onclick = null;
         }
 
         function checkGuess(selected, correct) {
