@@ -45,5 +45,14 @@ def get_message():
     print(guesses)
     return jsonify({'message': message, 'guesses': guesses, 'username': username})
 
+@app.route('/get_5050/<correct_username>')
+def get_5050(correct_username):
+    _, _, guesses = get_message_and_guesses()
+    incorrect_guesses = [guess for guess in guesses if guess != correct_username]
+    # Randomly select two incorrect guesses
+    if len(incorrect_guesses) > 2:
+        incorrect_guesses = random.sample(incorrect_guesses, 2)
+    return jsonify({'incorrect_guesses': incorrect_guesses})
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0')
