@@ -39,8 +39,13 @@ def get_message_and_guesses():
     # Filter messages for the selected user
     user_messages = [msg for user, msg in messages if user == selected_user]
 
-    # Randomly select a message from the user's messages
-    selected_message = random.choice(user_messages)
+    # Randomly select a valid message from the user's messages
+    selected_message = None
+    while True:  # Keep trying indefinitely
+        selected_message = random.choice(user_messages)
+        if len(selected_message) > 5:  # Check if the message length is greater than 5
+            break
+        # If the message is too short, continue the loop to select another message
 
     # Pick 4 random usernames for guesses (excluding the chosen username)
     remaining_users = [u for u in valid_users.keys() if u != selected_user]
