@@ -236,7 +236,7 @@
         </button>
         <button class="lifeline-button" id="blurbButton" onclick="showBlurb()" disabled>
             Blurb
-            <div class="tooltip">View additional information about the correct answer.</div>
+            <div class="tooltip">Show an AI generated blurb of the correct user (If available).</div>
         </button>
     </div>
 
@@ -253,6 +253,7 @@
         let correctUsername = '';
         let guesses = [];
         let fetchedData = {}; // Global variable to store fetched data
+        let blurbUsed = false; // Flag to track if the blurb button has been used
 
         // Array of clips hosted on the server
         const viewerClips = [
@@ -291,7 +292,7 @@
             const blurbButton = document.getElementById('blurbButton');
             if (fetchedData.blurb) {
                 blurbButton.disabled = false;
-                blurbButton.style.backgroundColor = '#28a745'; // Green
+                blurbButton.style.backgroundColor = blurbUsed ? '#dc3545' : '#28a745'; // Green if not used, Red if used
             } else {
                 blurbButton.disabled = true;
                 blurbButton.style.backgroundColor = '#757575'; // Grey
@@ -431,7 +432,7 @@
         function showBlurb() {
             // Display the blurb in the popup
             const blurbContent = document.getElementById('blurbContent');
-            blurbContent.innerText = `Blurb for ${correctUsername}: ${fetchedData.blurb}`;
+            blurbContent.innerText = `${fetchedData.blurb}`;
             document.getElementById('blurbPopup').style.display = 'block';
 
             // Disable the blurb button and change its color to red
@@ -439,6 +440,9 @@
             blurbButton.disabled = true;
             blurbButton.style.backgroundColor = '#dc3545'; // Red
             blurbButton.onclick = null; // Make it unclickable
+
+            // Set the blurbUsed flag to true
+            blurbUsed = true;
         }
 
         function closeBlurbPopup() {
