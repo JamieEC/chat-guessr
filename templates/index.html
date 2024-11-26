@@ -204,6 +204,7 @@
         <button class="lifeline-button" id="fiftyFifty" onclick="useFiftyFifty()">50/50</button>
         <button class="lifeline-button" id="helpfulClip" onclick="showHelpfulClip()">Helpful Clip</button>
         <button class="lifeline-button" id="askTheAudience" onclick="useAskTheAudience()">Ask the Audience</button>
+        <button class="lifeline-button" id="askAViewer" onclick="useAskAViewer()">Ask a Viewer</button>
     </div>
 
     
@@ -248,6 +249,11 @@
             disableButton('fiftyFifty');
         }
 
+        function useAskAViewer() {
+            window.open('https://discord.gg/aUSKbeJPXp', '_blank');
+            disableButton('askAViewer');
+        }
+
         function useAskTheAudience() {
             window.open('https://discord.gg/aUSKbeJPXp', '_blank');
             disableButton('askTheAudience');
@@ -276,7 +282,7 @@
                 isAnswered = true;
                 setTimeout(fetchMessage, 1000);
             } else {
-                if (attempts > 2) {
+                if (attempts > 1) {
                     lives--;
                     updateLives();
                     if (lives <= 0) {
