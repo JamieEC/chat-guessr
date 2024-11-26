@@ -236,7 +236,9 @@
                     button.onclick = null;
                 }
             });
-            document.getElementById('fiftyFifty').disabled = true;
+            const fiftyFiftyButton = document.getElementById('fiftyFifty');
+            fiftyFiftyButton.classList.add('disabled');
+            fiftyFiftyButton.onclick = null;
         }
 
         function checkGuess(selected, correct) {
