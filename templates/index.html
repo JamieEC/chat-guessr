@@ -240,7 +240,11 @@
         </button>
     </div>
 
-    
+    <div class="popup" id="blurbPopup" style="display: none;">
+        <div id="blurbContent"></div>
+        <button onclick="closeBlurbPopup()">Close</button>
+    </div>
+
     <script>
         let score = 0;
         let attempts = 0;
@@ -425,8 +429,20 @@
         }
 
         function showBlurb() {
-            // Display the blurb in a popup or alert
-            alert(`Blurb for ${correctUsername}: ${fetchedData.blurb}`);
+            // Display the blurb in the popup
+            const blurbContent = document.getElementById('blurbContent');
+            blurbContent.innerText = `Blurb for ${correctUsername}: ${fetchedData.blurb}`;
+            document.getElementById('blurbPopup').style.display = 'block';
+
+            // Disable the blurb button and change its color to red
+            const blurbButton = document.getElementById('blurbButton');
+            blurbButton.disabled = true;
+            blurbButton.style.backgroundColor = '#dc3545'; // Red
+            blurbButton.onclick = null; // Make it unclickable
+        }
+
+        function closeBlurbPopup() {
+            document.getElementById('blurbPopup').style.display = 'none';
         }
 
         fetchMessage();
