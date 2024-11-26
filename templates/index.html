@@ -295,7 +295,8 @@
                 blurbButton.style.backgroundColor = blurbUsed ? '#dc3545' : '#28a745'; // Green if not used, Red if used
             } else {
                 blurbButton.disabled = true;
-                blurbButton.style.backgroundColor = '#757575'; // Grey
+                blurbButton.style.backgroundColor = blurbUsed ? '#dc3545' : '#757575'; // Grey if not used, Red if used
+                ..blurbButton.style.backgroundColor = '#757575'; // Grey
             }
         }
 
