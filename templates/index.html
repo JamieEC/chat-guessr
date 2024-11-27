@@ -226,6 +226,8 @@
 
     <div class="popup" id="gameOverPopup" style="display: none;">
         <p>You're out of lives! Would you like to try again?</p>
+        <input type="text" id="usernameInput" placeholder="Enter your username" />
+        <button onclick="submitScore()">Submit Score</button>
         <button onclick="restartGame()">Try Again</button>
     </div>
 
@@ -490,6 +492,34 @@
 
         function closeBlurbPopup() {
             document.getElementById('blurbPopup').style.display = 'none';
+        }
+
+        function submitScore() {
+            const username = document.getElementById('usernameInput').value;
+            if (!username) {
+                alert('Please enter a username.');
+                return;
+            }
+
+            fetch('/submit_score', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ username: username, score: score })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Score submitted successfully!');
+                    restartGame();
+                } else {
+                    alert('Failed to submit score.');
+                }
+            })
+            .catch(error => {
+                console.error('Error submitting score:', error);
+            });
         }
 
         fetchMessage();

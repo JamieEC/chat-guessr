@@ -1,5 +1,5 @@
 import csv
-from flask import Flask, jsonify, render_template
+from flask import Flask, jsonify, render_template, request
 import os
 import random
 
@@ -69,6 +69,22 @@ def get_message():
     print(username)
     print(guesses)
     return jsonify({'message': message, 'guesses': guesses, 'username': username, 'blurb': blurb})
+
+@app.route('/submit_score', methods=['POST'])
+def submit_score():
+    data = request.json
+    username = data.get('username')
+    score = data.get('score')
+
+    if not username or score is None:
+        return jsonify({'success': False, 'error': 'Invalid data'})
+
+    # Save the score to a file
+    with open('scores.csv', 'a', newline='', encoding='utf-8') as csvfile:
+        writer = csv.writer(csvfile)
+        writer.writerow([username, score])
+
+    return jsonify({'success': True})
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0')
