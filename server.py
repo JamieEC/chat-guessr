@@ -100,7 +100,10 @@ def get_high_scores():
     # Sort scores in descending order
     scores.sort(key=lambda x: int(x['score']), reverse=True)
     
-    return jsonify({'scores': scores})
+    # Limit to top 10 scores
+    top_scores = scores[:10]
+    
+    return jsonify({'scores': top_scores})
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0')
