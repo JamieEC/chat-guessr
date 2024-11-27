@@ -27,25 +27,20 @@ def load_all_messages(file_path='all_messages.csv'):
 def get_message_and_guesses():
     messages, user_message_count = load_all_messages()  # Load messages and user counts
 
-    # Filter users with more than 9 messages
+    # Filter users with more than 25 messages
     valid_users = {user: count for user, count in user_message_count.items() if count > 25}
 
     if not valid_users:
         return None, None, []  # No valid users
 
-    # Randomly select a user from valid users
-    selected_user = random.choice(list(valid_users.keys()))
+    # Filter messages that are over 5 characters and belong to valid users
+    valid_messages = [(user, msg) for user, msg in messages if len(msg) > 5 and user in valid_users]
 
-    # Filter messages for the selected user
-    user_messages = [msg for user, msg in messages if user == selected_user]
+    if not valid_messages:
+        return None, None, []  # No valid messages
 
-    # Randomly select a valid message from the user's messages
-    selected_message = None
-    while True:  # Keep trying indefinitely
-        selected_message = random.choice(user_messages)
-        if len(selected_message) > 5:  # Check if the message length is greater than 5
-            break
-        # If the message is too short, continue the loop to select another message
+    # Randomly select a valid message and its user
+    selected_user, selected_message = random.choice(valid_messages)
 
     # Pick 4 random usernames for guesses (excluding the chosen username)
     remaining_users = [u for u in valid_users.keys() if u != selected_user]
