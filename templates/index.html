@@ -177,6 +177,20 @@
             background-color: #dc3545;
             cursor: not-allowed;
         }
+        .lifeline-container {
+            position: fixed;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .lifeline-label {
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
     </style>
 </head>
 <body>
@@ -218,27 +232,30 @@
         </div>
     </div>
 
-    <div class="lifeline">
-        <button class="lifeline-button" id="fiftyFifty" onclick="useFiftyFifty()">
-            50/50
-            <div class="tooltip">Removes two incorrect guesses.</div>
-        </button>
-        <button class="lifeline-button" id="helpfulClip" onclick="showHelpfulClip()">
-            Helpful Clip
-            <div class="tooltip">Watch a helpful and relevant Twitch clip to give some context.</div>
-        </button>
-        <button class="lifeline-button" id="askTheAudience" onclick="useAskTheAudience()">
-            Ask the Audience
-            <div class="tooltip">Start a Twitch poll and click this button to copy the message to your clipboard (no cheating!)</div>
-        </button>
-        <button class="lifeline-button" id="askAViewer" onclick="useAskAViewer()">
-            Ask a Viewer
-            <div class="tooltip">Video of a fan which may help you.</div>
-        </button>
-        <button class="lifeline-button" id="blurbButton" onclick="showBlurb()" disabled>
-            User Biography
-            <div class="tooltip">Show an AI generated biography of the correct user (If available).</div>
-        </button>
+    <div class="lifeline-container">
+        <div class="lifeline-label">Lifelines</div>
+        <div class="lifeline">
+            <button class="lifeline-button" id="fiftyFifty" onclick="useFiftyFifty()">
+                50/50
+                <div class="tooltip">Removes two incorrect guesses.</div>
+            </button>
+            <button class="lifeline-button" id="helpfulClip" onclick="showHelpfulClip()">
+                Helpful Clip
+                <div class="tooltip">Watch a helpful and relevant Twitch clip to give some context.</div>
+            </button>
+            <button class="lifeline-button" id="askTheAudience" onclick="useAskTheAudience()">
+                Ask the Audience
+                <div class="tooltip">Start a Twitch poll and click this button to copy the message to your clipboard (no cheating!)</div>
+            </button>
+            <button class="lifeline-button" id="askAViewer" onclick="useAskAViewer()">
+                Ask a Viewer
+                <div class="tooltip">Video of a fan which may help you.</div>
+            </button>
+            <button class="lifeline-button" id="blurbButton" onclick="showBlurb()" disabled>
+                User Biography
+                <div class="tooltip">Show an AI generated biography of the correct user (If available).</div>
+            </button>
+        </div>
     </div>
 
     <div class="popup" id="blurbPopup" style="display: none;">
