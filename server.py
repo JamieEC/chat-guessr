@@ -28,7 +28,7 @@ def get_message_and_guesses():
     messages, user_message_count = load_all_messages()  # Load messages and user counts
 
     # Filter users with more than 9 messages
-    valid_users = {user: count for user, count in user_message_count.items() if count > 9}
+    valid_users = {user: count for user, count in user_message_count.items() if count > 25}
 
     if not valid_users:
         return None, None, []  # No valid users
