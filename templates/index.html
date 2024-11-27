@@ -214,9 +214,25 @@
             flex-direction: column;
             align-items: flex-start;
         }
+        #highScorePopup {
+            position: fixed;
+            top: 30%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #f4f4f9;
+            padding: 20px;
+            border: 2px solid #333;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            text-align: center;
+            z-index: 1000;
+        }
     </style>
 </head>
 <body>
+    <div id="highScoreButton" style="position: absolute; top: 10px; left: 10px; background-color: #007bff; color: white; padding: 10px; border-radius: 5px; cursor: pointer; z-index: 1001;" onclick="showHighScores()">
+        High Scores
+    </div>
+
     <div class="title">Nevoguessr - Guess who said this degenerate comment</div>
     <div class="message" id="message"></div>
     <div class="guesses" id="guesses"></div>
@@ -286,6 +302,12 @@
     <div class="popup" id="blurbPopup" style="display: none;">
         <div id="blurbContent"></div>
         <button onclick="closeBlurbPopup()">Close</button>
+    </div>
+
+    <div class="popup" id="highScorePopup" style="display: none;">
+        <h2>High Scores</h2>
+        <div id="highScoreList"></div>
+        <button onclick="closeHighScorePopup()">Close</button>
     </div>
 
     <script>
@@ -520,6 +542,28 @@
             .catch(error => {
                 console.error('Error submitting score:', error);
             });
+        }
+
+        function showHighScores() {
+            fetch('/get_high_scores')
+                .then(response => response.json())
+                .then(data => {
+                    const highScoreList = document.getElementById('highScoreList');
+                    highScoreList.innerHTML = ''; // Clear previous scores
+                    data.scores.forEach(score => {
+                        const scoreItem = document.createElement('div');
+                        scoreItem.innerText = `${score.username}: ${score.score}`;
+                        highScoreList.appendChild(scoreItem);
+                    });
+                    document.getElementById('highScorePopup').style.display = 'block';
+                })
+                .catch(error => {
+                    console.error('Error fetching high scores:', error);
+                });
+        }
+
+        function closeHighScorePopup() {
+            document.getElementById('highScorePopup').style.display = 'none';
         }
 
         fetchMessage();

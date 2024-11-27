@@ -86,5 +86,21 @@ def submit_score():
 
     return jsonify({'success': True})
 
+@app.route('/get_high_scores')
+def get_high_scores():
+    scores = []
+    if os.path.exists('scores.csv'):
+        with open('scores.csv', mode='r', encoding='utf-8') as csvfile:
+            reader = csv.reader(csvfile)
+            for row in reader:
+                if len(row) == 2:  # Ensure there are two columns
+                    username, score = row
+                    scores.append({'username': username, 'score': score})
+    
+    # Sort scores in descending order
+    scores.sort(key=lambda x: int(x['score']), reverse=True)
+    
+    return jsonify({'scores': scores})
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0')
